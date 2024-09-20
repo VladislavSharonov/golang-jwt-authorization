@@ -1,0 +1,34 @@
+version: '3.4'
+
+services:
+  auth:
+    container_name: auth
+    build:
+      context: auth
+    networks:
+      - backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - test_secrets/auth.env
+    depends_on:
+      - db_auth
+
+  db_auth:
+    container_name: db_auth
+    build:
+      context: db_auth
+    networks:
+      - backend
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_auth_data:/var/lib/postgresql/data
+    env_file:
+      - test_secrets/db_auth.env
+
+networks:
+  backend:
+
+volumes:
+  db_auth_data:
